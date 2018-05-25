@@ -4,18 +4,23 @@ import (
 	"github.com/allbuleyu/gobase/gopl.io/ch7"
 	"golang.org/x/net/html"
 	"fmt"
+	"flag"
 )
 
 
 func main() {
+	var temp = ch7.CelsiusFlag("temp", 20.0, "the temperature")
+	flag.Parse()
+
+	fmt.Println(*temp)
+	return
+
 	//resp, err := http.Get("http://www.baidu.com")
 	//doc1, err := html.Parse(resp.Body)
 	//fmt.Println(doc1, err)
 	//return
 	reader := ch7.NewReader(str)
 	doc, err := html.Parse(reader)
-
-
 
 	fmt.Println(doc, err)
 }
