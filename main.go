@@ -5,14 +5,49 @@ import (
 	"golang.org/x/net/html"
 	"fmt"
 	"flag"
+	"os"
+	"bytes"
+	"io"
+	"net/http"
 )
 
+const debug bool = false
+
+func handler(w http.ResponseWriter, r *http.Request)  {
+	xxx := ch7.PrintTracks(nil)
+	//fmt.Fprintf(w, "url.path = %q \n", r.URL.Path)
+	xxx.Execute(w, ch7.Tracks)
+}
 
 func main() {
+	http.HandleFunc("/", handler)
+	fmt.Println(http.ListenAndServe("localhost:8080", nil))
+
+
+	return
+
+	var buf io.Writer
+	if debug {
+		buf = new(bytes.Buffer)
+	}
+
+	f := func(w io.Writer) {
+		if w != nil {
+			w.Write([]byte("hello"))
+			fmt.Println("not nil")
+		}else {
+			fmt.Println("nil")
+		}
+	}
+
+	f(buf)
+	return
+
+	fmt.Println(os.Args[1:])
 	var temp = ch7.CelsiusFlag("temp", 20.0, "the temperature")
 	flag.Parse()
 
-	fmt.Println(*temp)
+	fmt.Println(temp)
 	return
 
 	//resp, err := http.Get("http://www.baidu.com")

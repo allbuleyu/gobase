@@ -42,6 +42,7 @@ func (f *celsiusFlag) Set(s string) error {
 		f.Celsius = Celsius(value)
 		return nil
 	case "F", "°F":
+
 		f.Celsius = FToC(Fahrenheit(value))
 		return nil
 	}
@@ -50,7 +51,14 @@ func (f *celsiusFlag) Set(s string) error {
 }
 
 func CelsiusFlag(name string, value Celsius, usage string) *Celsius {
-	f := celsiusFlag{value}
+	f := celsiusFlag{Celsius:value}
 	flag.CommandLine.Var(&f, name, usage)
 	return &f.Celsius
 }
+
+
+type Tss struct {
+	I int
+}
+
+
