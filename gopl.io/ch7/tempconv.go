@@ -3,6 +3,9 @@ package ch7
 import (
 	"fmt"
 	"flag"
+	"io"
+	"bytes"
+	"os"
 )
 
 type Celsius float64
@@ -61,4 +64,32 @@ type Tss struct {
 	I int
 }
 
+// CelsiusFlag的测试方法
+func ttt() {
+	fmt.Println(os.Args[1:])
+	var temp = CelsiusFlag("temp", 20.0, "the temperature")
+	flag.Parse()
 
+	fmt.Println(temp)
+}
+
+// 接口的陷阱
+func xianjing() {
+	debug := false
+	//var buf io.Writer			// 不会出错
+	var buf *bytes.Buffer		// 会出错, panic   因为把*bytes.Buffer 转为io.Writer接口, io.Writer接口的动态类型是*bytes.Buffer,所以w != nil 为 true,调用w.Write时候panic
+	if debug {
+		buf = new(bytes.Buffer)
+	}
+
+	f := func(w io.Writer) {
+		if w != nil {
+			w.Write([]byte("hello"))
+			fmt.Println("not nil")
+		}else {
+			fmt.Println("nil")
+		}
+	}
+
+	f(buf)
+}

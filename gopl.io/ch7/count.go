@@ -38,6 +38,7 @@ type LimitedReader struct {
 	N int64
 }
 
+// very smart
 func (l *LimitedReader) Read(p []byte) (n int, err error) {
 	if l.N <= 0 {
 		return 0, io.EOF
