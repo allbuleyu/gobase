@@ -7,7 +7,8 @@ import (
 	"log"
 	"io"
 	"github.com/allbuleyu/gobase/gopl.io/ch3"
-	"runtime"
+
+	"github.com/allbuleyu/gobase/gopl.io/ch8"
 )
 
 const debug bool = false
@@ -32,30 +33,12 @@ func handler1(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-
-	http.HandleFunc("/", handler1)
-	http.ListenAndServe("localhost:8080", nil)
-
-
-	return
-	for i := 0; i < 10; i++ {
-		mmm = append(mmm, map[int]int{i:i})
+	url := "http://www.catjc.com"
+	urls, err := ch8.Extract(url)
+	for i := range urls {
+		fmt.Println(urls[i])
 	}
-
-	for _, mm := range mmm {
-		m := mm
-		fmt.Printf("mm ----- %p === %v \n", mm, mm)
-
-		fmt.Printf("m %p === %v \n", m, m)
-		fff = append(fff, func() {
-			fmt.Println(m)
-			fmt.Printf("%p\n", m)
-		})
-	}
-
-	for _, ff := range fff {
-		ff()
-	}
+	fmt.Println(err)
 
 }
 
