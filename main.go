@@ -9,6 +9,8 @@ import (
 	"github.com/allbuleyu/gobase/gopl.io/ch3"
 
 	"github.com/allbuleyu/gobase/gopl.io/ch8"
+
+	"flag"
 )
 
 const debug bool = false
@@ -33,13 +35,27 @@ func handler1(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	url := "http://www.catjc.com"
-	urls, err := ch8.Extract(url)
-	for i := range urls {
-		fmt.Println(urls[i])
+	flag.Parse()
+	roots := flag.Args()
+	if len(roots) == 0 {
+		roots = []string{"."}
 	}
-	fmt.Println(err)
 
+	fileSizes := make(chan int64)
+	go func() {
+		for _, root := range roots {
+			ch8.WalkDir(root, fileSizes, 0)
+		}
+		close(fileSizes)
+	}()
+
+	var nfiles, nbytes int64
+	for size := range fileSizes {
+		nfiles++
+		nbytes += size
+	}
+
+	fmt.Println(nfiles, nbytes)
 }
 
 func mustCopy(dst io.Writer, src io.Reader) {
