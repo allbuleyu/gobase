@@ -120,8 +120,3 @@ func forEachNode(n *html.Node, pre, post func(n *html.Node))  {
 		post(n)
 	}
 }
-
-func test() {
-	req, err := http.NewRequest("GET", "http://www.catjc.com", nil)
-
-}
