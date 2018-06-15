@@ -8,6 +8,9 @@ import (
 )
 
 func main() {
+	ch8.Chat()
+	return
+
 	listener, _ := net.Listen("tcp", "localhost:8080")
 	for {
 		conn, err := listener.Accept()
@@ -19,5 +22,5 @@ func main() {
 	}
 
 	return
-	ch8.Chat()
+
 }
