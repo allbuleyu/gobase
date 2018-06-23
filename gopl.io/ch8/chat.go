@@ -5,10 +5,11 @@ import (
 	"log"
 	"fmt"
 	"bufio"
+	"time"
 )
 
 func Chat() {
-	listener, err := net.Listen("tcp", "localhost:8080")
+	listener, err := net.Listen("udp", "localhost:8080")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -70,15 +71,32 @@ func handleConn(conn net.Conn) {
 
 	entering <- ch
 
+	tick := time.NewTimer(10 * time.Second)
+	go isTimeOutCloseCoon(tick, conn)
+
 
 	input := bufio.NewScanner(conn)
 	for input.Scan() {
 		messages <- who + ":" + input.Text()
+
+		// 刷新定时器
+		tick.Reset(10 * time.Second)
+		//tick = time.NewTicker(10 * time.Second)
 	}
 
 	leaving <- ch
 	messages <- who + " has left"
 	conn.Close()
+}
+
+func isTimeOutCloseCoon(t *time.Timer, conn net.Conn) {
+	for {
+		select {
+		case <- t.C:
+			fmt.Fprintf(conn, "timeout u out %v", t)
+			conn.Close()
+		}
+	}
 }
 
 func clientWriter(conn net.Conn, ch <- chan string)  {

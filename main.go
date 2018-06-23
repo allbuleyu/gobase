@@ -11,6 +11,7 @@ import (
 	"github.com/allbuleyu/gobase/gopl.io/ch8"
 
 	"flag"
+	"github.com/allbuleyu/gobase/gopl.io/ch9"
 )
 
 const debug bool = false
@@ -35,6 +36,14 @@ func handler1(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	ch9.Deposit(10)
+	fmt.Printf("balance: %d and withdraw is %v \n", ch9.Balance(), ch9.Withdraw(50))
+
+	ch9.Deposit(100)
+	fmt.Printf("withdraw: %v and balance is %d \n", ch9.Withdraw(50), ch9.Balance())
+
+	return
+
 	flag.Parse()
 	roots := flag.Args()
 	if len(roots) == 0 {
